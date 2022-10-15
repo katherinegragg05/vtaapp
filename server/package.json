@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Virtual Transaction Assistant Application - WEB API project folder",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
     "serve": "nodemon server.js",
@@ -11,8 +12,6 @@
   "keywords": [
     "nodejs",
     "express",
-    "apollo-server",
-    "graphql",
     "mongoose",
     "mongodb",
     "javascript",
@@ -21,13 +20,12 @@
   "author": "Katherine Gragg",
   "license": "ISC",
   "dependencies": {
-    "@apollo/server": "^4.0.0",
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "graphql": "^16.6.0",
-    "graphql-tag": "^2.12.6",
-    "graphql-tools": "^8.3.6",
+    "joi": "^17.6.3",
+    "joi-password-complexity": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.5"
   },
