@@ -11,7 +11,8 @@ userRouter.post("/", async (req, res) => {
   try {
     console.log("registration: started", { data: req.body });
     const { error } = validateUser(req.body);
-    if (error) return res.status(400).send({ ...error?.details });
+    if (error)
+      return res.status(400).send({ message: error.details[0].message });
 
     const user = await User.findOne({
       email: req.body.email,
