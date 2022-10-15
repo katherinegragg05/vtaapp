@@ -13,6 +13,8 @@
 
 ## How to run the code
 
+In two separate terminal do these items:
+
 _Start the server_
 
 ```shell
