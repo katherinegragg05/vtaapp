@@ -1,3 +1,3 @@
-import Users from "./userSchema";
+import Users from "./Users";
 
 export { Users };

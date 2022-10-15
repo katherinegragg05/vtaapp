@@ -8,6 +8,7 @@ const userSchema = new Schema({
   createdAt: {
     type: String,
     required: true,
+    default: Date.now,
   },
   accountId: {
     type: String,
@@ -32,8 +33,8 @@ const userSchema = new Schema({
   phoneNumber: String,
   addressLine1: String,
   addressLine2: String,
-  userType: {
-    type: String,
+  roles: {
+    type: Array,
     required: true,
   },
   avatarUrl: String,
