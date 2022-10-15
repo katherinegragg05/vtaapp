@@ -30,6 +30,8 @@ const userSchema = new Schema({
     required: true,
   },
   phoneNumber: String,
+  addressLine1: String,
+  addressLine2: String,
   userType: {
     type: String,
     required: true,
