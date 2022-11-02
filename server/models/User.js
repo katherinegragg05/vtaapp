@@ -1,12 +1,12 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 import jwt from "jsonwebtoken";
 import Joi from "joi";
 import passwordComplexity from "joi-password-complexity";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   accountId: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
@@ -15,13 +15,14 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, process.env.APP_SECRET_KEY, {
-    expiresIn: "7d",
-  });
+  const token = jwt.sign(
+    { _id: this._id, email: this.email },
+    process.env.APP_SECRET_KEY
+  );
   return token;
 };
 
-const User = mongoose.model("user", userSchema, "users");
+const User = model("Users", userSchema, "users");
 
 const validateUser = (data) => {
   const schema = Joi.object({
