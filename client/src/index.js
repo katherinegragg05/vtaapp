@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as VTAAPPRouter } from "react-router-dom";
 import "./index.css";
-import App from "./App";
+import App from "./App.jsx";
 
 ReactDOM.render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	</React.StrictMode>,
-	document.getElementById("root")
+  <React.StrictMode>
+    <VTAAPPRouter>
+      <App />
+    </VTAAPPRouter>
+  </React.StrictMode>,
+  document.getElementById("vtaapp_root")
 );

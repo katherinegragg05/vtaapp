@@ -1,27 +1,58 @@
-import * as dotenv from "dotenv";
-dotenv.config();
-import express from "express";
-import cors from "cors";
-
-// config
-import connectToMongoDB from "./config/database.js";
-import authRouter from "./routes/auth.js";
-import userRouter from "./routes/users.js";
-
-// connect to database first
-connectToMongoDB();
-
-// express
+require("dotenv").config();
+require("express-async-errors");
+const express = require("express");
 const app = express();
+const path = require("path");
+const { logger, logEvents } = require("./middleware/logger");
+const errorHandler = require("./middleware/errorHandler");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const corsOptions = require("./config/corsOptions");
+const connectDB = require("./config/dbConn");
+const mongoose = require("mongoose");
+const PORT = process.env.PORT || 3500;
 
-// middlewares
+console.log(process.env.NODE_ENV);
+
+connectDB();
+
+app.use(logger);
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
-app.use(cors());
 
-// routes
-app.use("/api/users", userRouter);
-app.use("/api/auth", authRouter);
+app.use(cookieParser());
 
-const port = process.env.PORT || 8080;
-//start the server
-app.listen(port, console.log(`🚀 Listening on port ${port}...`));
+app.use("/", express.static(path.join(__dirname, "public")));
+
+app.use("/", require("./routes/root"));
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/notes", require("./routes/noteRoutes"));
+
+app.all("*", (req, res) => {
+  res.status(404);
+  if (req.accepts("html")) {
+    res.sendFile(path.join(__dirname, "views", "404.html"));
+  } else if (req.accepts("json")) {
+    res.json({ message: "404 Not Found" });
+  } else {
+    res.type("txt").send("404 Not Found");
+  }
+});
+
+app.use(errorHandler);
+
+mongoose.connection.once("open", () => {
+  console.log("Connected to MongoDB");
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log(err);
+  logEvents(
+    `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
+    "mongoErrLog.log"
+  );
+});
