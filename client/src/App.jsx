@@ -1,9 +1,9 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import "./style.scss";
 
 import Layout from "./components/Layout";
-import Public from "./components/Public";
+// import Public from "./components/Public";
 import Login from "./features/auth/Login";
 import DashLayout from "./components/DashLayout";
 import Welcome from "./features/auth/Welcome";
@@ -19,6 +19,7 @@ import RequireAuth from "./features/auth/RequireAuth";
 import { ROLES } from "./config/roles";
 import useTitle from "./hooks/useTitle";
 import PageNotFound from "./pages/PageNotFound";
+import { Suspense } from "react";
 
 function App() {
   useTitle("Dan D. Repairs");
@@ -27,7 +28,14 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route index element={<Public />} />
+        <Route
+          index
+          element={
+            <Suspense fallback={<>...</>}>
+              <Navigate to="/login" replace />;
+            </Suspense>
+          }
+        />
         <Route path="login" element={<Login />} />
         {/* Protected Routes */}
         <Route element={<PersistLogin />}>
@@ -35,7 +43,7 @@ function App() {
             element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
           >
             <Route element={<Prefetch />}>
-              <Route path="home" element={<DashLayout />}>
+              <Route path="app" element={<DashLayout />}>
                 <Route index element={<Welcome />} />
 
                 <Route
