@@ -2,8 +2,8 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../features/auth/authSlice";
-import { useLoginMutation } from "../../features/auth/authApiSlice";
-import usePersist from "../../hooks/usePersist";
+import { useRegisterMutation } from "../../features/auth/authApiSlice";
+
 import useTitle from "../../hooks/useTitle";
 import PulseLoader from "react-spinners/PulseLoader";
 
@@ -11,23 +11,29 @@ import AuthImage from "../../img/1665802941095.png";
 import AuthDecoration from "../../img/auth-decoration.png";
 import Banners from "../../components/alerts/Banners";
 
-const Login = () => {
+const Register = () => {
   useTitle("Login - VTAAPP | UCC-Congress");
 
   const userRef = useRef(null);
   const errRef = useRef(null);
   const [accountId, setAccountId] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [middleInitial, setMiddleInitial] = useState("");
+  const [type, setType] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isAcceptedDataPrivacy, setIsAcceptedDataPrivacy] = useState(false);
   const [errMsg, setErrMsg] = useState("");
-  const [persist, setPersist] = usePersist();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [register, { isLoading }] = useRegisterMutation();
 
   useEffect(() => {
-    userRef.current.focus();
+    userRef?.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -37,11 +43,25 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { accessToken } = await login({ accountId, password }).unwrap();
-      dispatch(setCredentials({ accessToken }));
+      const { success } = await register({
+        accountId,
+        isAcceptedDataPrivacy,
+        firstName,
+        lastName,
+        middleInitial,
+        type,
+        email,
+        password,
+        confirmPassword,
+      }).unwrap();
+
       setAccountId("");
+      setFirstName("");
+      setLastName("");
+      setMiddleInitial("");
       setPassword("");
-      navigate("/app");
+      if (success) navigate("/login");
+      else alert("error");
     } catch (err) {
       if (!err.status) {
         setErrMsg("No Server Response");
@@ -53,15 +73,20 @@ const Login = () => {
   };
 
   const handleUserInput = (e) => setAccountId(e.target.value);
+  const handleFirstNameInput = (e) => setFirstName(e.target.value);
+  const handleLastNameInput = (e) => setLastName(e.target.value);
+  const handleMiddleInitInput = (e) => setMiddleInitial(e.target.value);
+  const handleSetType = (e) => setType(e.target.value);
+  const handleEmailInput = (e) => setEmail(e.target.value);
   const handlePwdInput = (e) => setPassword(e.target.value);
-  const handleToggle = () => setPersist((prev) => !prev);
-
-  const errClass = errMsg ? "errmsg" : "offscreen";
+  const handleConfrmPwdInput = (e) => setConfirmPassword(e.target.value);
+  const handleAcceptDataPrivacy = (e) =>
+    setIsAcceptedDataPrivacy(!isAcceptedDataPrivacy);
 
   if (isLoading) return <PulseLoader color={"#FFF"} />;
 
   return (
-    <main className="bg-white w-full">
+    <main className="bg-white">
       <div className="relative md:flex">
         {/* Content */}
         <div className="md:w-1/2">
@@ -114,10 +139,10 @@ const Login = () => {
 
             <div className="max-w-sm mx-auto px-4 py-8">
               <h1 className="text-3xl text-slate-800 font-bold mb-6">
-                Sign in - UCC VTA App
+                Create your Account 🚀
               </h1>
               {/* Form */}
-              <div ref={errRef} className="my-2">
+              <div className="my-2" ref={errRef}>
                 {errMsg ? <Banners type="error" message={errMsg} /> : <></>}
               </div>
               <form className="form" onSubmit={handleSubmit}>
@@ -127,7 +152,8 @@ const Login = () => {
                       className="block text-sm font-medium mb-1"
                       htmlFor="Account"
                     >
-                      Account/Student ID
+                      Account/Student ID{" "}
+                      <span className="text-rose-500">*</span>
                     </label>
                     <input
                       id="Account"
@@ -143,9 +169,96 @@ const Login = () => {
                   <div>
                     <label
                       className="block text-sm font-medium mb-1"
+                      htmlFor="firstName"
+                    >
+                      First Name <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      id="firstName"
+                      className="form-input w-full"
+                      type="text"
+                      value={firstName}
+                      onChange={handleFirstNameInput}
+                      autoComplete="off"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="block text-sm font-medium mb-1"
+                      htmlFor="lastName"
+                    >
+                      Last Name <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      id="lastName"
+                      className="form-input w-full"
+                      type="text"
+                      value={lastName}
+                      onChange={handleLastNameInput}
+                      autoComplete="off"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="block text-sm font-medium mb-1"
+                      htmlFor="middleInitial"
+                    >
+                      Middle Initial
+                    </label>
+                    <input
+                      id="middleInitial"
+                      className="form-input w-full"
+                      type="text"
+                      value={middleInitial}
+                      onChange={handleMiddleInitInput}
+                      autoComplete="off"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="block text-sm font-medium mb-1"
+                      htmlFor="role"
+                    >
+                      Account Type <span className="text-rose-500">*</span>
+                    </label>
+                    <select
+                      id="role"
+                      className="form-select w-full"
+                      onChange={handleSetType}
+                      value={type}
+                      required
+                    >
+                      <option value="">------</option>
+                      <option value="STUDENT">Student</option>
+                      <option value="ALUMNI">Alumni</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      className="block text-sm font-medium mb-1"
                       htmlFor="password"
                     >
-                      Password
+                      Email Address <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      className="form-input w-full"
+                      onChange={handleEmailInput}
+                      value={email}
+                      autoComplete="off"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="block text-sm font-medium mb-1"
+                      htmlFor="password"
+                    >
+                      Password <span className="text-rose-500">*</span>
                     </label>
                     <input
                       type="password"
@@ -157,6 +270,23 @@ const Login = () => {
                       required
                     />
                   </div>
+                  <div>
+                    <label
+                      className="block text-sm font-medium mb-1"
+                      htmlFor="confirmPassword"
+                    >
+                      Confirm Password <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="password"
+                      id="confirmPasswrd"
+                      className="form-input w-full"
+                      onChange={handleConfrmPwdInput}
+                      value={confirmPassword}
+                      autoComplete="new-password"
+                      required
+                    />
+                  </div>
                 </div>
                 <div className="flex items-center justify-between mt-6">
                   <div className="mr-1">
@@ -164,47 +294,39 @@ const Login = () => {
                       <input
                         type="checkbox"
                         className="form-checkbox"
-                        id="persist"
-                        onChange={handleToggle}
-                        checked={persist}
+                        onChange={handleAcceptDataPrivacy}
+                        checked={isAcceptedDataPrivacy}
                       />
-                      <span className="text-sm ml-2">Trust this device</span>
+                      <span className="text-xs ml-2">
+                        By checking this, you accept the{" "}
+                        <Link
+                          className="font-medium text-indigo-500 hover:text-indigo-600"
+                          to="#data-privacy"
+                        >
+                          Data Privacy
+                        </Link>
+                      </span>
                     </label>
                   </div>
                   <button
-                    className="btn bg-indigo-500 hover:bg-indigo-600 text-white "
+                    className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3 whitespace-nowrap"
                     type="submit"
                   >
-                    Sign In
+                    Register
                   </button>
                 </div>
               </form>
               {/* Footer */}
               <div className="pt-5 mt-6 border-t border-slate-200">
                 <div className="text-sm">
-                  Don’t you have an account?{" "}
+                  Have an account?{" "}
                   <Link
                     className="font-medium text-indigo-500 hover:text-indigo-600"
-                    to="/register"
+                    to="/login"
                   >
-                    Register Here
+                    Login Here
                   </Link>
                 </div>
-                {/* Warning */}
-                {/* <div className="mt-5">
-                  <div className="bg-amber-100 text-amber-600 px-3 py-2 rounded">
-                    <svg
-                      className="inline w-3 h-3 shrink-0 fill-current mr-2"
-                      viewBox="0 0 12 12"
-                    >
-                      <path d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z" />
-                    </svg>
-                    <span className="text-sm">
-                      To support you during the pandemic super pro features are
-                      free until March 31st.
-                    </span>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
@@ -216,10 +338,10 @@ const Login = () => {
           aria-hidden="true"
         >
           <img
-            className="object-cover object-center h-full w-full"
+            className="object-cover object-center w-full h-full"
             src={AuthImage}
-            width="190"
-            height="216"
+            width="760"
+            height="1024"
             alt="Authentication"
           />
           <img
@@ -234,4 +356,4 @@ const Login = () => {
     </main>
   );
 };
-export default Login;
+export default Register;

@@ -26,12 +26,17 @@ const login = async (req, res) => {
     const foundUser = await Users.findOne({ accountId }).exec();
 
     if (!foundUser || !foundUser?.active) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res
+        .status(401)
+        .json({
+          message:
+            "Unable to find the active user with the provided account id",
+        });
     }
 
     const match = await bcrypt.compare(password, foundUser?.password);
 
-    if (!match) return res.status(401).json({ message: "Unauthorized" });
+    if (!match) return res.status(401).json({ message: "Incorrect Password" });
 
     const accessToken = jwt.sign(
       {
@@ -88,13 +93,23 @@ const register = async (req, res) => {
       firstName,
       lastName,
       middleInitial,
-      dateOfBirth,
+      // dateOfBirth,
       type,
       email,
       password,
       confirmPassword,
     } = req.body;
-    console.log("register: started", { accountId, email });
+    console.log("register: started", {
+      accountId,
+      isAcceptedDataPrivacy,
+      firstName,
+      lastName,
+      middleInitial,
+      type,
+      email,
+      password,
+      confirmPassword,
+    });
 
     // const roles = getRoles( type === "stdnt" ? "STUDENT" : "ALUMNI")
     const roles = getRoles(type);
@@ -104,7 +119,6 @@ const register = async (req, res) => {
       !accountId ||
       !firstName ||
       !lastName ||
-      !dateOfBirth ||
       !type ||
       !email ||
       !password ||
@@ -147,7 +161,7 @@ const register = async (req, res) => {
       firstName,
       lastName,
       middleInitial,
-      dateOfBirth,
+      dateOfBirth: "",
       email,
       password: hashedPwd,
       roles,
