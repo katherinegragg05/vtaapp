@@ -17,7 +17,7 @@ const Welcome = () => {
     <section className="welcome">
       <p>{today}</p>
 
-      <h1>Welcome {firstName}!</h1>
+      <h1 className="text-red-300">Welcome {firstName}!</h1>
 
       <p>
         <Link to="/dash/notes">View techNotes</Link>

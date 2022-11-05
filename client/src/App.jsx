@@ -1,4 +1,7 @@
 import { Routes, Route } from "react-router-dom";
+
+import "./style.scss";
+
 import Layout from "./components/Layout";
 import Public from "./components/Public";
 import Login from "./features/auth/Login";
@@ -15,6 +18,7 @@ import PersistLogin from "./features/auth/PersistLogin";
 import RequireAuth from "./features/auth/RequireAuth";
 import { ROLES } from "./config/roles";
 import useTitle from "./hooks/useTitle";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   useTitle("Dan D. Repairs");
@@ -25,14 +29,13 @@ function App() {
         {/* public routes */}
         <Route index element={<Public />} />
         <Route path="login" element={<Login />} />
-
         {/* Protected Routes */}
         <Route element={<PersistLogin />}>
           <Route
             element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}
           >
             <Route element={<Prefetch />}>
-              <Route path="dash" element={<DashLayout />}>
+              <Route path="home" element={<DashLayout />}>
                 <Route index element={<Welcome />} />
 
                 <Route
@@ -65,6 +68,7 @@ function App() {
         </Route>
         {/* End Protected Routes */}
       </Route>
+      <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 }
