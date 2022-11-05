@@ -194,7 +194,7 @@ const refresh = (req, res) => {
     async (err, decoded) => {
       if (err) return res.status(403).json({ message: "Forbidden" });
 
-      const foundUser = await User.findOne({
+      const foundUser = await Users.findOne({
         accountId: decoded.accountId,
       }).exec();
 
