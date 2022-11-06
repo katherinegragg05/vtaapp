@@ -1,0 +1,3 @@
+*.html
+*.css
+# include on prettier IDE settings app/.prettierignore
