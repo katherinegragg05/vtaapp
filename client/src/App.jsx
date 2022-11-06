@@ -21,6 +21,7 @@ import useTitle from "./hooks/useTitle";
 import PageNotFound from "./pages/PageNotFound";
 import { Suspense } from "react";
 import Register from "./pages/auth/Register";
+import Home from "./pages/Home";
 
 function App() {
   useTitle("Dan D. Repairs");
@@ -46,7 +47,7 @@ function App() {
           >
             <Route element={<Prefetch />}>
               <Route path="app" element={<DashLayout />}>
-                <Route index element={<Welcome />} />
+                <Route index element={<Home />} />
 
                 <Route
                   element={
