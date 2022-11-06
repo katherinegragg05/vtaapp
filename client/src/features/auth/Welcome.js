@@ -5,7 +5,7 @@ import useTitle from "../../hooks/useTitle";
 const Welcome = () => {
   const { firstName, isManager, isAdmin } = useAuth();
 
-  useTitle(`techNotes: ${firstName}`);
+  useTitle(`Home - VTAAPP | UCC-Congress: ${firstName}`);
 
   const date = new Date();
   const today = new Intl.DateTimeFormat("en-US", {
@@ -41,6 +41,19 @@ const Welcome = () => {
     </section>
   );
 
-  return content;
+  return (
+    <main>
+      <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+        {/* Page header */}
+        <div className="mb-8">
+          <h1 className="text-2xl md:text-3xl text-slate-800 font-bold">
+            Home 🏠
+          </h1>
+        </div>
+
+        <div className="border-t border-slate-200"></div>
+      </div>
+    </main>
+  );
 };
 export default Welcome;

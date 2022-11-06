@@ -26,12 +26,9 @@ const login = async (req, res) => {
     const foundUser = await Users.findOne({ accountId }).exec();
 
     if (!foundUser || !foundUser?.active) {
-      return res
-        .status(401)
-        .json({
-          message:
-            "Unable to find the active user with the provided account id",
-        });
+      return res.status(401).json({
+        message: "Unable to find the active user with the provided account id",
+      });
     }
 
     const match = await bcrypt.compare(password, foundUser?.password);
@@ -42,6 +39,7 @@ const login = async (req, res) => {
       {
         UserInfo: {
           accountId: foundUser?.accountId,
+          firstName: foundUser?.firstName,
           email: foundUser?.email,
           roles: foundUser?.roles,
         },

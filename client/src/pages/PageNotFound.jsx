@@ -21,7 +21,7 @@ function PageNotFound() {
               Hmm...this page doesn’t exist. Try searching for something else!
             </div>
             <Link
-              to="/"
+              to="/app"
               className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
             >
               Back To Dashboard
