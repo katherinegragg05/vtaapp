@@ -23,6 +23,8 @@ import { Suspense } from "react";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
 import RequestList from "./pages/request/RequestList";
+import ViewRequestItem from "./pages/request/ViewRequestItem";
+import NewRequest from "./pages/request/NewRequest";
 
 function App() {
   useTitle("VTAAPP | UCC-Congress");
@@ -57,8 +59,8 @@ function App() {
                 >
                   <Route path="request">
                     <Route index element={<RequestList />} />
-                    {/* <Route path=":id" element={<EditUser />} />
-                    <Route path="new" element={<NewUserForm />} /> */}
+                    <Route path=":id" element={<ViewRequestItem />} />
+                    <Route path="new" element={<NewRequest />} />
                   </Route>
                 </Route>
 
