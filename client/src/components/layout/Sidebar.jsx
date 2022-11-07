@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { ROLES } from "../../config/roles";
+import { classNames } from "../../helpers/utils";
+import useAuth from "../../hooks/useAuth";
 import { useCloseClickedOutSide } from "../../hooks/useCloseClickedOutSide";
 import { useCloseESCPressed } from "../../hooks/useCloseESCPressed";
 function Sidebar({ sidebarOpen, setSidebarOpen }) {
+  const { roles } = useAuth();
+  console.log("Sidebar: roles", roles);
   const location = useLocation();
   const { pathname } = location;
 
@@ -40,7 +45,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
       <div
         id="sidebar"
         ref={sidebar}
-        className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out ${
+        className={`flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-green-800 p-4 transition-all duration-200 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-64"
         }`}
       >
@@ -123,8 +128,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             <ul className="mt-3">
               {/* Home */}
               <li
+                key={1}
                 className={`px-3 py-2 rounded mb-0.5 last:mb-0 ${
-                  pathname === "/app" && "bg-slate-700"
+                  pathname === "/app" && "bg-green-700"
                 }`}
               >
                 <NavLink
@@ -161,6 +167,49 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   </div>
                 </NavLink>
               </li>
+              {(roles.includes(ROLES.Student) ||
+                roles.includes(ROLES.Alumni)) && (
+                <li
+                  key={2}
+                  className={`px-3 py-2 rounded mb-0.5 last:mb-0 ${
+                    pathname.includes("request") && "bg-green-700"
+                  }`}
+                >
+                  <NavLink
+                    end
+                    to="request"
+                    className={`block text-slate-200 hover:text-white truncate transition duration-150 ${
+                      pathname.includes("request") && "hover:text-slate-200"
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                        <path
+                          className={classNames(
+                            "fill-current",
+                            pathname.includes("request")
+                              ? "text-indigo-500"
+                              : "text-slate-600"
+                          )}
+                          d="M8.07 16H10V8H8.07a8 8 0 110 8z"
+                        />
+                        <path
+                          className={classNames(
+                            "fill-current",
+                            pathname.includes("request")
+                              ? "text-indigo-300"
+                              : "text-slate-400"
+                          )}
+                          d="M15 12L8 6v5H0v2h8v5z"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                        Request
+                      </span>
+                    </div>
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
         </div>
