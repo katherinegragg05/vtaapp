@@ -185,9 +185,39 @@ const createNewRequest = async (req, res) => {
 //   res.json(reply);
 // };
 
+/**
+ *
+ * Create a new request
+ * POST /api/requests/create
+ *
+ * @param {*} req
+ * @param {*} res
+ *
+ */
+
+const uploadReceipt = async (req, res) => {
+  try {
+    const { files } = req;
+    console.log("uploadReceipt: started ", {});
+    res.send({
+      data: files,
+      msg: "Successfully uploaded " + files + " files!",
+    });
+  } catch (error) {
+    console.error("uploadReceipt: exception occurred", {
+      errorMsg: error?.message,
+    });
+    return res.status(500).json({
+      success: false,
+      message: `Error Occurred: ${error?.message || "Internal Server Error"}`,
+    });
+  }
+};
+
 module.exports = {
   getAllRequests,
   createNewRequest,
+  uploadReceipt,
   // updateRequest,
   // deleteRequest,
 };

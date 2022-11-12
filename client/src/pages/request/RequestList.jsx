@@ -27,20 +27,31 @@ function RequestList() {
   });
 
   let content;
-
-  if (isLoading)
+  console.log(requests);
+  if (isLoading) {
     return (
       <LoadingState
         loadingText="Loading, Please wait ..."
         icon={() => <PulseLoader color={"#3f1b1b"} />}
       />
     );
+  }
 
+  if (!requests) {
+    return (
+      <EmptyState
+        linkTo="new"
+        btnText="New Request"
+        title="Create your First Request"
+        bodyText="By creating a request, the admin will be able to deliver that when requirements are fulfilled"
+      />
+    );
+  }
   if (isError) {
     content = <Banners type="error" message={error?.data?.message} />;
   }
 
-  const { ids, entities } = requests;
+  const { entities } = requests;
 
   const dataArr = Object.values(entities);
   return (

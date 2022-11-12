@@ -131,12 +131,12 @@ const Login = () => {
                     </label>
                     <input
                       id="Account"
+                      name="accountId"
                       className="form-input w-full"
                       type="text"
                       ref={userRef}
                       value={accountId}
                       onChange={handleUserInput}
-                      autoComplete="off"
                       required
                     />
                   </div>
@@ -153,7 +153,6 @@ const Login = () => {
                       className="form-input w-full"
                       onChange={handlePwdInput}
                       value={password}
-                      autoComplete="new-password"
                       required
                     />
                   </div>
