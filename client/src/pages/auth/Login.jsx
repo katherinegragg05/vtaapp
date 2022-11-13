@@ -7,7 +7,7 @@ import usePersist from "../../hooks/usePersist";
 import useTitle from "../../hooks/useTitle";
 import PulseLoader from "react-spinners/PulseLoader";
 
-import AuthImage from "../../img/1665802941095.png";
+import AuthImage from "../../img/1821476_orig.jpg";
 import AuthDecoration from "../../img/auth-decoration.png";
 import Banners from "../../components/alerts/Banners";
 
