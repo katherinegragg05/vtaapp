@@ -106,7 +106,7 @@ function ViewRequestItem() {
               <div>
                 <a
                   className="btn bg-indigo-500 hover:bg-indigo-600 text-white whitespace-nowrap w-full"
-                  href="https://uccvtaappbucket.s3.ap-southeast-1.amazonaws.com/SampleFile.pdf"
+                  href="https://uccvtaappbucket.s3.ap-southeast-1.amazonaws.com/Order+of+Payment.pdf"
                   download={true}
                   target="_blank"
                   rel="noreferrer"

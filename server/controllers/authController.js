@@ -90,6 +90,7 @@ const register = async (req, res) => {
       lastName,
       middleInitial,
       // dateOfBirth,
+      course,
       type,
       email,
       password,
@@ -116,6 +117,7 @@ const register = async (req, res) => {
       !firstName ||
       !lastName ||
       !type ||
+      !course ||
       !email ||
       !password ||
       !confirmPassword
@@ -161,6 +163,7 @@ const register = async (req, res) => {
       email,
       password: hashedPwd,
       roles,
+      course,
     };
 
     // Create and store new user
