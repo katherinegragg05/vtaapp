@@ -28,18 +28,19 @@ const requestSchema = new mongoose.Schema({
   documentRequested: String,
   status: {
     type: String,
-    allowedValues: [
-      "Draft",
-      "Submitted",
-      "Received",
-      "Confirmation",
-      "Scheduled",
-      "Done",
-      "Archived",
-      "Rescheduled",
-    ],
+    required: true,
   },
+  fullName: {
+    type: String,
+    required: true,
+  },
+  course: {
+    type: String,
+    required: true,
+  },
+  orderOfPaymentReferenceId: String,
   schedule: String,
+  isVerified: Boolean,
   isServed: Boolean,
   isRescheduled: Boolean,
 });

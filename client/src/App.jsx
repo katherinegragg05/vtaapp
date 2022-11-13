@@ -25,6 +25,8 @@ import Home from "./pages/Home";
 import RequestList from "./pages/request/RequestList";
 import ViewRequestItem from "./pages/request/ViewRequestItem";
 import NewRequest from "./pages/request/NewRequest";
+import ManageRequest from "./pages/request/ManageRequest";
+import AllRequests from "./pages/request/AllRequests";
 
 function App() {
   useTitle("VTAAPP | UCC-Congress");
@@ -82,7 +84,8 @@ function App() {
                     <Route path="new" element={<NewUserForm />} />
                   </Route>
                   <Route path="requests-to-manage">
-                    <Route index element={<RequestList />} />
+                    <Route index element={<AllRequests />} />
+                    <Route path=":id" element={<ManageRequest />} />
                   </Route>
                 </Route>
 

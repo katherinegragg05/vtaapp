@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function EmptyState({ linkTo, btnText, title, bodyText }) {
+function EmptyState({ linkTo, btnText, title, bodyText, noButton }) {
   return (
     <div className="max-w-2xl m-auto mt-16">
       <div className="text-center px-4">
@@ -23,18 +23,20 @@ function EmptyState({ linkTo, btnText, title, bodyText }) {
         </div>
         <h2 className="text-2xl text-slate-800 font-bold mb-2">{title}</h2>
         <div className="mb-6">{bodyText}</div>
-        <Link
-          className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
-          to={linkTo}
-        >
-          <svg
-            className="w-4 h-4 fill-current opacity-50 shrink-0"
-            viewBox="0 0 16 16"
+        {!noButton && (
+          <Link
+            className="btn bg-indigo-500 hover:bg-indigo-600 text-white"
+            to={linkTo}
           >
-            <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-          </svg>
-          <span className="ml-2">{btnText}</span>
-        </Link>
+            <svg
+              className="w-4 h-4 fill-current opacity-50 shrink-0"
+              viewBox="0 0 16 16"
+            >
+              <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+            </svg>
+            <span className="ml-2">{btnText}</span>
+          </Link>
+        )}
       </div>
     </div>
   );

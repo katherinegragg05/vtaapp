@@ -43,16 +43,18 @@ export const requestsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Request", id: "LIST" }],
     }),
-    // updateNote: builder.mutation({
-    //   query: (initialNote) => ({
-    //     url: "/api/notes",
-    //     method: "PATCH",
-    //     body: {
-    //       ...initialNote,
-    //     },
-    //   }),
-    //   invalidatesTags: (result, error, arg) => [{ type: "Note", id: arg.id }],
-    // }),
+    confirmRequest: builder.mutation({
+      query: (initialRequest) => ({
+        url: "/api/requests/confirm-request",
+        method: "PATCH",
+        body: {
+          ...initialRequest,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Request", id: arg.id },
+      ],
+    }),
     // deleteNote: builder.mutation({
     //   query: ({ id }) => ({
     //     url: `/api/notes`,
@@ -67,7 +69,7 @@ export const requestsApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetRequestsQuery,
   useAddNewRequestMutation,
-  //   useUpdateNoteMutation,
+  useConfirmRequestMutation,
   //   useDeleteNoteMutation,
 } = requestsApiSlice;
 

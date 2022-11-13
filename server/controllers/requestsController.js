@@ -70,6 +70,13 @@ const createNewRequest = async (req, res) => {
       purpose,
       documentRequested,
       status: "Pending Verification",
+      fullName:
+        checkUser?.lastName +
+        ", " +
+        checkUser?.firstName +
+        " " +
+        checkUser?.middleInitial,
+      course: checkUser?.course,
     });
     console.log("createNewRequest: created", { success: !!createdRequest });
 
@@ -98,61 +105,48 @@ const createNewRequest = async (req, res) => {
 
 /**
  *
- * Update a user through id
- * PATCH /api/users/update
+ * Update a request through id by Admin only (confirm request)
+ * PATCH /api/requests/confirm-request
  *
  * @param {*} req
  * @param {*} res
  *
  */
 
-// const updateRequest = async (req, res) => {
-//   const { id, accountId, roles, active, password } = req.body;
+const confirmRequest = async (req, res) => {
+  try {
+    const { id, confirmed } = req.body;
+    console.log("confirmRequest: started", { id, confirmed });
+    // Confirm data
+    if (!confirmed || !id) {
+      return res.status(400).json({
+        message: "Please provide required information to confirm the request.",
+      });
+    }
 
-//   // Confirm data
-//   if (
-//     !id ||
-//     !accountId ||
-//     !Array.isArray(roles) ||
-//     !roles.length ||
-//     typeof active !== "boolean"
-//   ) {
-//     return res
-//       .status(400)
-//       .json({ message: "All fields except password are required" });
-//   }
+    const request = await Requests.findOne({ _id: id }).exec();
 
-//   // Does the user exist to update?
-//   const user = await Users.findById(id).exec();
+    if (!request) {
+      return res.status(400).json({ message: "Request not found" });
+    }
+    const admin = isAdmin(req?.roles);
+    if (!admin) return res.status(500).json({ message: "Not authorized" });
+    request.status = "Pending Payment";
+    request.isVerified = confirmed === "confirmed";
 
-//   if (!user) {
-//     return res.status(400).json({ message: "User not found" });
-//   }
-
-//   // Check for duplicate
-//   const duplicate = await Users.findOne({ accountId })
-//     .collation({ locale: "en", strength: 2 })
-//     .lean()
-//     .exec();
-
-//   // Allow updates to the original user
-//   if (duplicate && duplicate?._id.toString() !== id) {
-//     return res.status(409).json({ message: "Duplicate accountId" });
-//   }
-
-//   user.accountId = accountId;
-//   user.roles = roles;
-//   user.active = active;
-
-//   if (password) {
-//     // Hash password
-//     user.password = await bcrypt.hash(password, 10); // salt rounds
-//   }
-
-//   const updatedUser = await user.save();
-
-//   res.json({ message: `${updatedUser.accountId} updated` });
-// };
+    const updatedRequest = await request.save();
+    console.log("confirmRequest: updated", { updatedRequest });
+    return res.status(200).json({ success: true, message: "Request updated" });
+  } catch (error) {
+    console.error("confirmRequest: exception occurred", {
+      errorMsg: error?.message,
+    });
+    return res.status(500).json({
+      success: false,
+      message: `Error Occurred: ${error?.message || "Internal Server Error"}`,
+    });
+  }
+};
 
 // /**
 //  *
@@ -224,6 +218,7 @@ module.exports = {
   getAllRequests,
   createNewRequest,
   uploadReceipt,
+  confirmRequest,
   // updateRequest,
   // deleteRequest,
 };

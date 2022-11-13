@@ -14,7 +14,7 @@ router.route("/create").post(requestsController.createNewRequest);
 //   .route("/upload-receipt")
 //   .post(upload.single("receipt"), requestsController.uploadReceipt);
 
-// router.route("/update").post(requestsController.updateRequest);
+router.route("/confirm-request").patch(requestsController.confirmRequest);
 
 // router.route("/remove").post(requestsController.deleteRequest);
 
