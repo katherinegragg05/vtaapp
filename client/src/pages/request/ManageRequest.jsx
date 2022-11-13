@@ -50,6 +50,7 @@ function ManageRequest() {
               docid={id}
               name={request?.fullName}
               course={request?.course}
+              status={request?.status}
             >
               <div>
                 <section>
