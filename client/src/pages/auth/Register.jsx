@@ -1,15 +1,14 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setCredentials } from "../../features/auth/authSlice";
 import { useRegisterMutation } from "../../features/auth/authApiSlice";
 
 import useTitle from "../../hooks/useTitle";
 import PulseLoader from "react-spinners/PulseLoader";
 
-import AuthImage from "../../img/1665802941095.png";
+import AuthImage from "../../img/1821476_orig.jpg";
 import AuthDecoration from "../../img/auth-decoration.png";
 import Banners from "../../components/alerts/Banners";
+import { courses } from "../../helpers/utils";
 
 const Register = () => {
   useTitle("Login - VTAAPP | UCC-Congress");
@@ -25,10 +24,10 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isAcceptedDataPrivacy, setIsAcceptedDataPrivacy] = useState(false);
+  const [course, setCourse] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [register, { isLoading }] = useRegisterMutation();
 
@@ -50,6 +49,7 @@ const Register = () => {
         lastName,
         middleInitial,
         type,
+        course,
         email,
         password,
         confirmPassword,
@@ -82,7 +82,7 @@ const Register = () => {
   const handleConfrmPwdInput = (e) => setConfirmPassword(e.target.value);
   const handleAcceptDataPrivacy = (e) =>
     setIsAcceptedDataPrivacy(!isAcceptedDataPrivacy);
-
+  const handleSetCourseTaken = (e) => setCourse(e.target.value);
   if (isLoading) return <PulseLoader color={"#FFF"} />;
 
   return (
@@ -95,7 +95,7 @@ const Register = () => {
             <div className="flex-1">
               <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
-                <Link className="block" to="/">
+                <Link className="block" to="/app">
                   <svg width="32" height="32" viewBox="0 0 32 32">
                     <defs>
                       <linearGradient
@@ -137,7 +137,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="max-w-sm mx-auto px-4 py-8">
+            <div className="max-w-sm mx-auto px-4 py-1">
               <h1 className="text-3xl text-slate-800 font-bold mb-6">
                 Create your Account 🚀
               </h1>
@@ -234,6 +234,28 @@ const Register = () => {
                       <option value="">------</option>
                       <option value="STUDENT">Student</option>
                       <option value="ALUMNI">Alumni</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      className="block text-sm font-medium mb-1"
+                      htmlFor="role"
+                    >
+                      Course Taken <span className="text-rose-500">*</span>
+                    </label>
+                    <select
+                      id="role"
+                      className="form-select w-full"
+                      onChange={handleSetCourseTaken}
+                      value={course}
+                      required
+                    >
+                      <option value="">------</option>
+                      {courses?.map((item, index) => (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>

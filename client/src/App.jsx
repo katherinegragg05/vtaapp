@@ -22,9 +22,14 @@ import PageNotFound from "./pages/PageNotFound";
 import { Suspense } from "react";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
+import RequestList from "./pages/request/RequestList";
+import ViewRequestItem from "./pages/request/ViewRequestItem";
+import NewRequest from "./pages/request/NewRequest";
+import ManageRequest from "./pages/request/ManageRequest";
+import AllRequests from "./pages/request/AllRequests";
 
 function App() {
-  useTitle("Dan D. Repairs");
+  useTitle("VTAAPP | UCC-Congress");
 
   return (
     <Routes>
@@ -48,7 +53,20 @@ function App() {
             <Route element={<Prefetch />}>
               <Route path="app" element={<DashLayout />}>
                 <Route index element={<Home />} />
+                {/* For Students/Alumni */}
+                <Route
+                  element={
+                    <RequireAuth allowedRoles={[ROLES.Student, ROLES.Alumni]} />
+                  }
+                >
+                  <Route path="request">
+                    <Route index element={<RequestList />} />
+                    <Route path=":id" element={<ViewRequestItem />} />
+                    <Route path="new" element={<NewRequest />} />
+                  </Route>
+                </Route>
 
+                {/* For admin */}
                 <Route
                   element={
                     <RequireAuth
@@ -64,6 +82,10 @@ function App() {
                     <Route index element={<UsersList />} />
                     <Route path=":id" element={<EditUser />} />
                     <Route path="new" element={<NewUserForm />} />
+                  </Route>
+                  <Route path="requests-to-manage">
+                    <Route index element={<AllRequests />} />
+                    <Route path=":id" element={<ManageRequest />} />
                   </Route>
                 </Route>
 

@@ -33,6 +33,10 @@ function Header({ sidebarOpen, setSidebarOpen }) {
                 <rect x="4" y="17" width="16" height="2" />
               </svg>
             </button>
+            <b className="hidden md:block">
+              UCC - Virtual Transaction Assistance
+            </b>
+            <b className="block md:hidden text-xs m-2">VTA App</b>
           </div>
 
           {/* Header: Right side */}

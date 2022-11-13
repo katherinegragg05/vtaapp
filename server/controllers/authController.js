@@ -44,14 +44,19 @@ const login = async (req, res) => {
           roles: foundUser?.roles,
         },
       },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "5h" }
+      process.env.ACCESS_TOKEN_SECRET
     );
 
     const refreshToken = jwt.sign(
-      { accountId: foundUser?.accountId },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" }
+      {
+        UserInfo: {
+          accountId: foundUser?.accountId,
+          firstName: foundUser?.firstName,
+          email: foundUser?.email,
+          roles: foundUser?.roles,
+        },
+      },
+      process.env.REFRESH_TOKEN_SECRET
     );
 
     // Create secure cookie with refresh token
@@ -92,6 +97,7 @@ const register = async (req, res) => {
       lastName,
       middleInitial,
       // dateOfBirth,
+      course,
       type,
       email,
       password,
@@ -118,6 +124,7 @@ const register = async (req, res) => {
       !firstName ||
       !lastName ||
       !type ||
+      !course ||
       !email ||
       !password ||
       !confirmPassword
@@ -163,6 +170,7 @@ const register = async (req, res) => {
       email,
       password: hashedPwd,
       roles,
+      course,
     };
 
     // Create and store new user
@@ -215,12 +223,13 @@ const refresh = (req, res) => {
       const accessToken = jwt.sign(
         {
           UserInfo: {
-            accountId: foundUser.accountId,
-            roles: foundUser.roles,
+            accountId: foundUser?.accountId,
+            firstName: foundUser?.firstName,
+            email: foundUser?.email,
+            roles: foundUser?.roles,
           },
         },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "15m" }
+        process.env.ACCESS_TOKEN_SECRET
       );
 
       res.json({ accessToken });

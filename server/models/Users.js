@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: "UCC-Congress",
   },
+  course: String,
 
   //Accouint info
   password: {

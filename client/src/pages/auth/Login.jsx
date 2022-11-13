@@ -70,7 +70,7 @@ const Login = () => {
             <div className="flex-1">
               <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
                 {/* Logo */}
-                <Link className="block" to="/">
+                <Link className="block" to="/app">
                   <svg width="32" height="32" viewBox="0 0 32 32">
                     <defs>
                       <linearGradient
@@ -131,12 +131,12 @@ const Login = () => {
                     </label>
                     <input
                       id="Account"
+                      name="accountId"
                       className="form-input w-full"
                       type="text"
                       ref={userRef}
                       value={accountId}
                       onChange={handleUserInput}
-                      autoComplete="off"
                       required
                     />
                   </div>
@@ -153,7 +153,6 @@ const Login = () => {
                       className="form-input w-full"
                       onChange={handlePwdInput}
                       value={password}
-                      autoComplete="new-password"
                       required
                     />
                   </div>
