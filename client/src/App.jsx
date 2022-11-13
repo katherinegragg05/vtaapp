@@ -81,6 +81,9 @@ function App() {
                     <Route path=":id" element={<EditUser />} />
                     <Route path="new" element={<NewUserForm />} />
                   </Route>
+                  <Route path="requests-to-manage">
+                    <Route index element={<RequestList />} />
+                  </Route>
                 </Route>
 
                 <Route path="notes">

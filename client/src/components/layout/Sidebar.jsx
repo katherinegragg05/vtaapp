@@ -210,6 +210,50 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   </NavLink>
                 </li>
               )}
+              {(roles.includes(ROLES.SuperAdmin) ||
+                roles.includes(ROLES.Admin)) && (
+                <li
+                  key={2}
+                  className={`px-3 py-2 rounded mb-0.5 last:mb-0 ${
+                    pathname.includes("requests-to-manage") && "bg-green-700"
+                  }`}
+                >
+                  <NavLink
+                    end
+                    to="requests-to-manage"
+                    className={`block text-slate-200 hover:text-white truncate transition duration-150 ${
+                      pathname.includes("requests-to-manage") &&
+                      "hover:text-slate-200"
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                        <path
+                          className={classNames(
+                            "fill-current",
+                            pathname.includes("requests-to-manage")
+                              ? "text-indigo-500"
+                              : "text-slate-600"
+                          )}
+                          d="M8.07 16H10V8H8.07a8 8 0 110 8z"
+                        />
+                        <path
+                          className={classNames(
+                            "fill-current",
+                            pathname.includes("requests-to-manage")
+                              ? "text-indigo-300"
+                              : "text-slate-400"
+                          )}
+                          d="M15 12L8 6v5H0v2h8v5z"
+                        />
+                      </svg>
+                      <span className="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                        Manage Requests
+                      </span>
+                    </div>
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
         </div>

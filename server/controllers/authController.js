@@ -48,7 +48,14 @@ const login = async (req, res) => {
     );
 
     const refreshToken = jwt.sign(
-      { accountId: foundUser?.accountId },
+      {
+        UserInfo: {
+          accountId: foundUser?.accountId,
+          firstName: foundUser?.firstName,
+          email: foundUser?.email,
+          roles: foundUser?.roles,
+        },
+      },
       process.env.REFRESH_TOKEN_SECRET
     );
 

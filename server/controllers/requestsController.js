@@ -7,6 +7,7 @@ const getRoles = require("../config/roles");
 const { idGeneratorHelper } = require("../config/utils");
 
 const Requests = require("../models/Requests");
+const isAdmin = require("../middleware/isAdmin");
 
 /**
  *
@@ -21,9 +22,13 @@ const Requests = require("../models/Requests");
 const getAllRequests = async (req, res) => {
   console.log("getAllRequests: started", { accountId: req.accountId });
   // Get all Requests from MongoDB
-  const foundRequests = await Requests.find({
-    accountId: req?.accountId,
-  }).exec();
+  const admin = await isAdmin(req?.roles);
+
+  const foundRequests = admin
+    ? await Requests.find({}).exec()
+    : await Requests.find({
+        accountId: req?.accountId,
+      }).exec();
   // If no Requests
   if (!foundRequests?.length) {
     return res.status(400).json({ message: "No Requests found" });
@@ -64,7 +69,7 @@ const createNewRequest = async (req, res) => {
       userId: checkUser?._id,
       purpose,
       documentRequested,
-      status: "Pending Payment",
+      status: "Pending Verification",
     });
     console.log("createNewRequest: created", { success: !!createdRequest });
 
