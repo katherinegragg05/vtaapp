@@ -6,7 +6,7 @@ import useAuth from "../../hooks/useAuth";
 import Banners from "../alerts/Banners";
 import LoadingState from "./LoadingState";
 
-function UsersTilesCard({ docid, name, course, children }) {
+function UsersTilesCard({ docid, name, course, status, children }) {
   const { isManager, isAdmin } = useAuth();
   const errRef = useRef(null);
   const [confirmRequest, { isLoading, isSuccess, isError, error }] =
@@ -70,28 +70,30 @@ function UsersTilesCard({ docid, name, course, children }) {
           </div>
         </div>
         {/* Card footer */}
-        <div className="border-t border-slate-200">
-          <div className="flex divide-x divide-slate-200r">
-            <button
-              className="block flex-1 text-center text-sm text-indigo-500 hover:text-indigo-600 font-medium px-3 py-4"
-              onClick={() => handleConfirm("confirmed")}
-            >
-              <div className="flex items-center justify-center">
-                <span>✅</span>
-                <span>Confirm Request</span>
-              </div>
-            </button>
-            <button
-              className="block flex-1 text-center text-sm text-slate-600 hover:text-slate-800 font-medium px-3 py-4 group"
-              onClick={() => handleConfirm("denied")}
-            >
-              <div className="flex items-center justify-center">
-                <span>🚫</span>
-                <span>Deny</span>
-              </div>
-            </button>
+        {status === "Pending Verification" && (
+          <div className="border-t border-slate-200">
+            <div className="flex divide-x divide-slate-200r">
+              <button
+                className="block flex-1 text-center text-sm text-indigo-500 hover:text-indigo-600 font-medium px-3 py-4"
+                onClick={() => handleConfirm("confirmed")}
+              >
+                <div className="flex items-center justify-center">
+                  <span>✅</span>
+                  <span>Confirm Request</span>
+                </div>
+              </button>
+              <button
+                className="block flex-1 text-center text-sm text-slate-600 hover:text-slate-800 font-medium px-3 py-4 group"
+                onClick={() => handleConfirm("denied")}
+              >
+                <div className="flex items-center justify-center">
+                  <span>🚫</span>
+                  <span>Deny</span>
+                </div>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
