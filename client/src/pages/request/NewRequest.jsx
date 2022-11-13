@@ -4,9 +4,8 @@ import { useDispatch } from "react-redux";
 import useTitle from "../../hooks/useTitle";
 import LoadingState from "../../components/global/LoadingState";
 import PulseLoader from "react-spinners/PulseLoader";
-import { useRegisterMutation } from "../../features/auth/authApiSlice";
 import Banners from "../../components/alerts/Banners";
-import FileDropzone from "../../components/global/FileDropzone";
+// import FileDropzone from "../../components/global/FileDropzone";
 import { useAddNewRequestMutation } from "../../features/requests/requestsApiSlice";
 
 function NewRequest() {
@@ -43,11 +42,13 @@ function NewRequest() {
     e.preventDefault();
     try {
       if (canSave) {
-        await addNewRequest({
+        const response = await addNewRequest({
           purpose,
           documentRequested,
         }).unwrap();
-        navigate("/app/request");
+
+        if (response?.success && response?.requestId)
+          navigate(`/app/request/${response?.requestId}`);
       } else {
         alert("Please provide required fields.");
         return;
@@ -144,7 +145,7 @@ function NewRequest() {
                     <option value="Application for removal of incomplete grades">
                       Application for removal of incomplete grades
                     </option>
-                    <option value="Order of Paymen">Order of Payment</option>
+                    {/* <option value="Order of Paymen">Order of Payment</option> */}
                   </select>
                 </div>
 
@@ -175,7 +176,7 @@ function NewRequest() {
                     </option>
                   </select>
                 </div>
-                <div>
+                {/* <div>
                   <label
                     className="block text-sm font-medium mb-1"
                     htmlFor="role"
@@ -183,13 +184,15 @@ function NewRequest() {
                     Upload Files needed <span className="text-rose-500">*</span>
                   </label>
                   <FileDropzone />
+                </div> */}
+                <div>
+                  <button
+                    className="btn bg-indigo-500 hover:bg-indigo-600 text-white whitespace-nowrap w-full"
+                    type="submit"
+                  >
+                    Send Request for Validation
+                  </button>
                 </div>
-                <button
-                  className="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3 whitespace-nowrap"
-                  type="submit"
-                >
-                  Register
-                </button>
               </div>
             </form>
             {/* Footer */}

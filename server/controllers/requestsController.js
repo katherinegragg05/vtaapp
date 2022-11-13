@@ -44,17 +44,11 @@ const getAllRequests = async (req, res) => {
 
 const createNewRequest = async (req, res) => {
   try {
-    const { purpose, proofOfPaymentFile, requirements, documentRequested } =
-      req.body;
+    const { purpose, documentRequested } = req.body;
     const accountId = req?.accountId;
     console.log("createNewRequest: started", { accountId, ...req?.body });
     // Confirm data
-    if (
-      !purpose ||
-      // !proofOfPaymentFile ||
-      // !requirements ||
-      !documentRequested
-    ) {
+    if (!purpose || !documentRequested) {
       return res.status(400).json({ message: "Required fields are missing." });
     }
     const checkUser = await Users.findOne({ accountId }).exec();
@@ -62,23 +56,30 @@ const createNewRequest = async (req, res) => {
       return res.status(400).json({ message: "User not found." });
     }
     // Create and store new Request
+    const id = idGeneratorHelper("req");
     const createdRequest = await Requests.create({
-      _id: idGeneratorHelper("req"),
+      _id: id,
       createdAt: new Date(),
       accountId,
       userId: checkUser?._id,
       purpose,
-      // proofOfPaymentFile,
-      // requirements,
       documentRequested,
-      status: "Draft",
+      status: "Pending Payment",
     });
     console.log("createNewRequest: created", { success: !!createdRequest });
 
     // Created
     return createdRequest
-      ? res.status(201).json({ message: "New request created" })
-      : res.status(400).json({ message: "Invalid request data received" });
+      ? res.status(201).json({
+          requestId: id,
+          success: true,
+          message: "New request created",
+        })
+      : res.status(400).json({
+          requestdId: null,
+          success: false,
+          message: "Failed to send request",
+        });
   } catch (error) {
     console.error("createNewRequest: exception occurred", {
       errorMsg: error?.message,

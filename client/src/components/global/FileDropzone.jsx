@@ -1,13 +1,18 @@
-import React from "react";
+import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
-function FileDropzone({ type }) {
+function FileDropzone({ type, setFile }) {
+  const onDrop = useCallback((acceptedFiles) => {
+    console.log("File DropZone", acceptedFiles);
+    setFile(acceptedFiles);
+  }, []);
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
       "image/png": [],
     },
     maxFiles: 1,
+    onDrop,
   });
 
   const files = acceptedFiles.map((file) => (

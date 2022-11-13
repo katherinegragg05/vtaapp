@@ -10,9 +10,9 @@ router.route("/get-all").get(requestsController.getAllRequests);
 
 router.route("/create").post(requestsController.createNewRequest);
 
-router
-  .route("/upload-receipt")
-  .post(upload.single("receipt"), requestsController.uploadReceipt);
+// router
+//   .route("/upload-receipt")
+//   .post(upload.single("receipt"), requestsController.uploadReceipt);
 
 // router.route("/update").post(requestsController.updateRequest);
 
